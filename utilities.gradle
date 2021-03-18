@@ -1,0 +1,17 @@
+def getProps(path, properties) {
+    def propertiesFile = file(path)
+    if (propertiesFile.exists()) {
+        properties.load(new FileInputStream(file(path)))
+    }
+}
+
+def getAllProps(String path) {
+    Properties props = new Properties()
+    getProps(path, props)
+    return props
+}
+
+ext {
+    config = getAllProps('gradle.properties')
+}
+
