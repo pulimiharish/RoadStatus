@@ -3,7 +3,6 @@ package com.harish.tfl.data
 import com.google.gson.annotations.SerializedName
 
 data class ErrorStatusModel(
-
     @SerializedName("$" + "type") val type: String,
     @SerializedName("timestampUtc") val timestampUtc: String,
     @SerializedName("exceptionType") val exceptionType: String,

@@ -62,7 +62,6 @@ class RoadStatusActivity : AppCompatActivity() {
         showProgressBar: Boolean
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
             RoadNameInputView(getString(R.string.enter_text),
                 getString(R.string.road_label),
                 ::getRoadStatus,

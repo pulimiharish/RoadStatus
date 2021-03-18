@@ -1,0 +1,15 @@
+# Local configuration file (sdk path, etc)
+local.properties
+
+app/build
+.gradle
+.DS_Store
+build
+
+.idea/workspace.xml
+.idea/copyright/profiles_settings.xml
+app/app.iml
+android.iml
+.idea/misc.xml
+
+.idea

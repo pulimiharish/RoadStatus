@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner getInstrumentation(project)
 
         buildConfigField "String", "TFL_URL", config.getProperty("TFL_URL") ?: "https://api.tfl.gov.uk/"
-        buildConfigField "String", "TFL_KEY", config.getProperty("TFL_KEY") ?: "00982225f03f43e3ab891aeda69c1c91"
+        buildConfigField "String", "TFL_KEY", config.getProperty("TFL_KEY")
 
     }
     buildFeatures {
@@ -34,16 +34,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion '1.0.0-beta01'
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     packagingOptions {
         exclude "**/attach_hotspot_windows.dll"
         exclude "META-INF/licenses/**"

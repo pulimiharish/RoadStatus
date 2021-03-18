@@ -27,10 +27,10 @@ class RoadStatusViewModelTest {
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
+    private lateinit var viewModel: RoadStatusViewModel
+
     @Mock
     lateinit var roadStatusRepository: RoadStatusRepository
-
-    private lateinit var viewModel: RoadStatusViewModel
 
     @Mock
     private lateinit var roadStatusModelObserver: Observer<List<RoadStatusModel>>
