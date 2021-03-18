@@ -9,6 +9,7 @@ import com.harish.tfl.viewmodel.RoadStatusViewModel
 import io.reactivex.Single
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,16 +53,7 @@ class RoadStatusViewModelTest {
     }
 
     @Test
-    fun `Success RoadStatus response invokes the correct Success observable`() {
-
-        val roadStatusResponse = listOf(RoadStatusModel("Tfl.Api.Presentation.Entities.RoadCorridor",
-            "a1",
-            "A1",
-            "Good",
-            "No Exceptional Delays",
-            "[[-0.25616,51.5319],[-0.10234,51.6562]]",
-            "[[-0.25616,51.5319],[-0.25616,51.6562],[-0.10234,51.6562],[-0.10234,51.5319],[-0.25616,51.5319]]",
-            "/Road/a1"))
+    fun `Success RoadStatus response invokes the Success observable`() {
         `when`(roadStatusRepository.getRoadStatus("A1")).thenReturn(Single.just(roadStatusResponse))
 
         viewModel.getRoadStatus(true, "A1")
@@ -70,7 +62,7 @@ class RoadStatusViewModelTest {
     }
 
     @Test
-    fun `Error RoadStatus response invokes the correct Error observable`() {
+    fun `Error RoadStatus response invokes the Error observable`() {
         val errorMessage = "Exception"
         `when`(roadStatusRepository.getRoadStatus("A99")).thenReturn(Single.error(java.lang.RuntimeException(errorMessage)))
 
@@ -80,7 +72,7 @@ class RoadStatusViewModelTest {
     }
 
     @Test
-    fun `Http Error RoadStatus response invokes the correct Error observable`() {
+    fun `Http Error RoadStatus response invokes the Error observable`() {
         val errorMessage = "The following road id is not recognised: A99"
         val jsonResponse: Response<Void> = Response.error(404,
             getResponseJsonObject(errorMessage).toResponseBody("application/json".toMediaTypeOrNull())
@@ -91,6 +83,40 @@ class RoadStatusViewModelTest {
         viewModel.getRoadStatus(true, "A99")
 
         verify(errorObserver, times(1)).onChanged(errorMessage)
+    }
+
+    @Test
+    fun `Calling the service API invokes the loading observable`() {
+        `when`(roadStatusRepository.getRoadStatus("A1")).thenReturn(Single.just(roadStatusResponse))
+
+        viewModel.getRoadStatus(true, "A1")
+
+        assertEquals(viewModel.loadingObservable().value, false)
+    }
+
+    @Test
+    fun `Calling the service API with an empty road id does not invoke the success observable`() {
+        viewModel.getRoadStatus(true, "")
+
+        verify(roadStatusModelObserver, times(0)).onChanged(roadStatusResponse)
+    }
+
+    @Test
+    fun `Calling the service API with an empty road id does not invoke the loading observable`() {
+        viewModel.getRoadStatus(true, "")
+
+        assertEquals(viewModel.loadingObservable().value, null)
+    }
+
+    companion object {
+        val roadStatusResponse = listOf(RoadStatusModel("Tfl.Api.Presentation.Entities.RoadCorridor",
+            "a1",
+            "A1",
+            "Good",
+            "No Exceptional Delays",
+            "[[-0.25616,51.5319],[-0.10234,51.6562]]",
+            "[[-0.25616,51.5319],[-0.25616,51.6562],[-0.10234,51.6562],[-0.10234,51.5319],[-0.25616,51.5319]]",
+            "/Road/a1"))
     }
 
 }
